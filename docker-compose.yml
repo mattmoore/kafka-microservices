@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  zookeeper:
+    image: mattmoore/kafka-zookeeper
+    entrypoint: '/docker-entrypoint.sh'
+    ports:
+      - '2181:2181'
+
+  kafka:
+    image: mattmoore/kafka
+    entrypoint: '/docker-entrypoint.sh'
+    depends_on:
+      - 'zookeeper'
+    ports:
+      - '9092:9092'
+
+  order-processor:
+    image: mattmoore/order-processor
+    entrypoint: '/docker-entrypoint.sh'
+    depends_on:
+      - 'zookeeper'
+      - 'kafka'
